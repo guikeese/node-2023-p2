@@ -41,8 +41,8 @@ export async function transactionsRoutes(app: FastifyInstance) {
     await checkSessionId
   })
 
-  // , { preHandler: [checkSessionId] }
-  app.get('/', async (req, res) => {
+  //
+  app.get('/', { preHandler: [checkSessionId] }, async (req, res) => {
     const { sessionId } = req.cookies
 
     const transactions = await knex('transactions')
@@ -52,7 +52,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
     return { transactions }
   })
 
-  app.get('/:id', async (req, res) => {
+  app.get('/:id', { preHandler: [checkSessionId] }, async (req, res) => {
     const { sessionId } = req.cookies
 
     const getTransactionBodySchema = z.object({
@@ -68,7 +68,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
     return { transaction }
   })
 
-  app.get('/summary', async (req) => {
+  app.get('/summary', { preHandler: [checkSessionId] }, async (req) => {
     const { sessionId } = req.cookies
 
     const summary = await knex('transactions')
